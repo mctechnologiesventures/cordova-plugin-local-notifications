@@ -2,6 +2,7 @@
  * Apache 2.0 License
  *
  * Copyright (c) Sebastian Katzer 2017
+ * Contributor fquirin, Bhumin Bhandari, powowbox
  *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
@@ -30,9 +31,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.service.notification.StatusBarNotification;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.util.ArraySet;
-import android.support.v4.util.Pair;
+import android.util.Pair;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -44,16 +43,18 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import androidx.collection.ArraySet;
+import androidx.core.app.NotificationCompat;
 
 import static android.app.AlarmManager.RTC;
 import static android.app.AlarmManager.RTC_WAKEUP;
-import static android.app.PendingIntent.FLAG_CANCEL_CURRENT;
-import static android.app.PendingIntent.FLAG_IMMUTABLE;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.M;
-import static android.support.v4.app.NotificationCompat.PRIORITY_HIGH;
-import static android.support.v4.app.NotificationCompat.PRIORITY_MAX;
-import static android.support.v4.app.NotificationCompat.PRIORITY_MIN;
+import static androidx.core.app.NotificationCompat.PRIORITY_HIGH;
+import static androidx.core.app.NotificationCompat.PRIORITY_MAX;
+import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
+
+import de.appplant.cordova.plugin.notification.util.LaunchUtils;
 
 /**
  * Wrapper class around OS notification class. Handles basic operations
@@ -217,9 +218,9 @@ public final class Notification {
 
             if (!date.after(new Date()) && trigger(intent, receiver))
                 continue;
-
-            PendingIntent pi = PendingIntent.getBroadcast(
-                    context, 0, intent, FLAG_IMMUTABLE | FLAG_CANCEL_CURRENT);
+            int notificationId = options.getId();
+            PendingIntent pi =
+              LaunchUtils.getBroadcastPendingIntent(context, intent, notificationId);
 
             try {
                 switch (options.getPrio()) {
@@ -228,9 +229,10 @@ public final class Notification {
                         break;
                     case PRIORITY_MAX:
                         if (SDK_INT >= M) {
-                            mgr.setExactAndAllowWhileIdle(RTC_WAKEUP, time, pi);
+                            AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(time, pi);
+                            mgr.setAlarmClock(info, pi);
                         } else {
-                            mgr.setExact(RTC, time, pi);
+                            mgr.setExact(RTC_WAKEUP, time, pi);
                         }
                         break;
                     default:
@@ -296,7 +298,8 @@ public final class Notification {
      */
     private void cancelScheduledAlarms() {
         SharedPreferences prefs = getPrefs(PREF_KEY_PID);
-        String id               = options.getIdentifier();
+        String id = options.getIdentifier();
+        int notificationId = options.getId();
         Set<String> actions     = prefs.getStringSet(id, null);
 
         if (actions == null)
@@ -304,10 +307,7 @@ public final class Notification {
 
         for (String action : actions) {
             Intent intent = new Intent(action);
-
-            PendingIntent pi = PendingIntent.getBroadcast(
-                    context, 0, intent, FLAG_IMMUTABLE);
-
+            PendingIntent pi = LaunchUtils.getBroadcastPendingIntent(context, intent, notificationId);
             if (pi != null) {
                 getAlarmMgr().cancel(pi);
             }
@@ -325,6 +325,8 @@ public final class Notification {
         }
 
         grantPermissionToPlaySoundFromExternal();
+        new NotificationVolumeManager(context, options)
+            .adjustAlarmVolume();
         getNotMgr().notify(getId(), builder.build());
     }
 

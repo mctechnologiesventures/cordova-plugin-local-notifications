@@ -2,6 +2,8 @@
  * Apache 2.0 License
  *
  * Copyright (c) Sebastian Katzer 2017
+ * Contributors Bhumin Bhandari, fquirin, powowbox and many more:
+ * https://github.com/katzer/cordova-plugin-local-notifications/graphs/contributors
  *
  * This file contains Original Code and/or Modifications of Original Code
  * as defined in and that are subject to the Apache License
@@ -25,10 +27,12 @@ var exec    = require('cordova/exec'),
 // Defaults
 exports._defaults = {
     actions       : [],
+    alarmVolume   : -1,
     attachments   : [],
+    autoLaunch    : false,
     autoClear     : true,
     badge         : null,
-    channel       : null,
+    channelName   : null,
     clock         : true,
     color         : null,
     data          : null,
@@ -46,6 +50,7 @@ exports._defaults = {
     number        : 0,
     priority      : 0,
     progressBar   : false,
+    resetDelay   : 5,
     silent        : false,
     smallIcon     : 'res://icon',
     sound         : true,
@@ -56,7 +61,11 @@ exports._defaults = {
     title         : '',
     trigger       : { type : 'calendar' },
     vibrate       : false,
-    wakeup        : true
+    wakeup        : true,
+    channelId     : null,
+    wakeLockTimeout: null,
+    fullScreenIntent: false,
+    triggerInApp: false
 };
 
 // Event listener
@@ -85,6 +94,61 @@ exports.hasPermission = function (callback, scope) {
 exports.requestPermission = function (callback, scope) {
     this._exec('request', null, callback, scope);
 };
+
+/**
+ * Check to see if the user has allowed "Do Not Disturb" permissions for this app.
+ * This is required to use alarmVolume to take a user out of silent mode.
+ *
+ * @param {Function} callback The function to be exec as the callback.
+ * @param {Object} scope callback function's scope
+ */
+exports.hasDoNotDisturbPermissions = function (callback, scope) {
+    this._exec('hasDoNotDisturbPermissions', null, callback, scope);
+}
+
+/**
+ * Request "Do Not Disturb" permissions for this app.
+ * The only way to do this is to launch the global do not distrub settings for all apps.
+ * This permission is required to use alarmVolume to take a user out of silent mode.
+ *
+ * @param {Function} callback The function to be exec as the callback.
+ * @param {Object} scope callback function's scope.
+ */
+exports.requestDoNotDisturbPermissions = function (callback, scope) {
+    this._exec('requestDoNotDisturbPermissions', null, callback, scope);
+}
+
+/**
+ * Check to see if the app is ignoring battery optimizations.  This needs
+ * to be whitelisted by the user.
+ *
+ * Callback contains true or false for whether or not we have this permission.
+ *
+ * @param {Function} callback The function to be exec as the callback.
+ * @param {Object} scope callback function's scope
+ */
+exports.isIgnoringBatteryOptimizations = function (callback, scope) {
+    this._exec('isIgnoringBatteryOptimizations', null, callback, scope);
+}
+
+/**
+ * Request permission to ignore battery optimizations.
+ * The only way to do this is to launch the global battery optimization settings for all apps.
+ * This permission is required to allow alarm to trigger logic within the app while the app is dead.
+ *
+ * Callback is deferred until user returns.
+ *
+ * @param {Function} callback The function to be exec as the callback.
+ * @param {Object} scope callback function's scope
+ */
+exports.requestIgnoreBatteryOptimizations = function (callback, scope) {
+    if (device.platform === 'iOS') {
+        console.warn('[Notifications] requestIgnoreBatteryOptimizations not supported on iOS');
+        callback(true);
+    }
+
+    this._exec('requestIgnoreBatteryOptimizations', null, callback, scope);
+}
 
 /**
  * Schedule notifications.
@@ -153,6 +217,24 @@ exports.update = function (msgs, callback, scope, args) {
         this.requestPermission(fn, this);
     }
 };
+
+/**
+ * To set dummyNotifications to get notification for Android 13.
+ *
+ * @param [ Function ] callback The function to be exec as the callback.
+ * @param [ Object ]   scope    The callback function's scope.
+ *
+ * @return [ Void ]
+ */
+ exports.setDummyNotifications = function (callback, scope) {
+	if (device.platform !== 'Android') {
+        console.warn('[Notifications] setDummyNotifications only supported on Android');
+        callback(true);
+    }else{
+        this._exec('dummyNotifications', null, callback, scope);
+	}
+};
+
 
 /**
  * Clear the specified notifications by id.
@@ -576,7 +658,7 @@ exports._mergeWithDefaults = function (options) {
 
     options.meta = {
         plugin:  'cordova-plugin-local-notification',
-        version: '0.9-beta.3'
+        version: '0.10.0'
     };
 
     return options;
