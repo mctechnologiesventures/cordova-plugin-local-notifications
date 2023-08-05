@@ -336,7 +336,7 @@ public final class Options {
 
             return aRGB + 0xFF000000;
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
 
         return 0;
@@ -395,11 +395,11 @@ public final class Options {
             int aRGB = Integer.parseInt(hex, 16);
             return aRGB + 0xFF000000;
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
 
         return NotificationCompat.COLOR_DEFAULT;
@@ -431,7 +431,7 @@ public final class Options {
         try {
             bmp = assets.getIconFromUri(uri);
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
 
         return bmp;
@@ -661,7 +661,7 @@ public final class Options {
                 pics.add(pic);
                 break;
             } catch (IOException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
         }
 

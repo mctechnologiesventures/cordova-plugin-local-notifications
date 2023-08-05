@@ -140,7 +140,7 @@ public final class AssetUtil {
             copyFile(in, out);
         } catch (Exception e) {
             Log.e("Asset", "File not found: assets/" + resPath);
-            e.printStackTrace();
+            // e.printStackTrace();
             return Uri.EMPTY;
         }
 
@@ -205,13 +205,13 @@ public final class AssetUtil {
             return getUriFromFile(file);
         } catch (MalformedURLException e) {
             Log.e("Asset", "Incorrect URL");
-            e.printStackTrace();
+            // e.printStackTrace();
         } catch (FileNotFoundException e) {
             Log.e("Asset", "Failed to create new File from HTTP Content");
-            e.printStackTrace();
+            // e.printStackTrace();
         } catch (IOException e) {
             Log.e("Asset", "No Input can be created from http Stream");
-            e.printStackTrace();
+            // e.printStackTrace();
         }
 
         return Uri.EMPTY;
@@ -234,7 +234,7 @@ public final class AssetUtil {
             out.flush();
             out.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 
@@ -356,7 +356,7 @@ public final class AssetUtil {
             String authority = context.getPackageName() + ".localnotifications.provider";
             return AssetProvider.getUriForFile(context, authority, file);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             return Uri.EMPTY;
         }
     }

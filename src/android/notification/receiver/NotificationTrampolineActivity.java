@@ -30,7 +30,7 @@ public class NotificationTrampolineActivity extends AppCompatActivity {
         try {
           mainActivityClass = Class.forName(mainActivityClassName);
         } catch (ClassNotFoundException e) {
-          e.printStackTrace();
+          // e.printStackTrace();
           return;
         }
 

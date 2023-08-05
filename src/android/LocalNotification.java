@@ -392,7 +392,7 @@ public class LocalNotification extends CordovaPlugin {
             details.put("id", launchDetails.first);
             details.put("action", launchDetails.second);
         } catch (JSONException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
 
         command.success(details);
@@ -729,7 +729,7 @@ public class LocalNotification extends CordovaPlugin {
                 data.put("notification", toast.getId());
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
 
         if (toast != null) {

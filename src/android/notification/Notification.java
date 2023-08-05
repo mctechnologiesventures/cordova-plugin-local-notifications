@@ -361,7 +361,7 @@ public final class Notification {
         try {
             json = new JSONObject(dict.toString());
         } catch (JSONException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
 
         return json.toString();
@@ -433,7 +433,7 @@ public final class Notification {
                 String key = (String)it.next();
                 dict.put(key, updates.opt(key));
             } catch (JSONException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
         }
     }

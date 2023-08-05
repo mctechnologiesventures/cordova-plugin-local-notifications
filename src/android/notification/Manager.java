@@ -261,7 +261,7 @@ public final class Manager {
             try {
                 ids.add(Integer.parseInt(key));
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
         }
 
@@ -397,7 +397,7 @@ public final class Manager {
 
             return new Options(context, dict);
         } catch (JSONException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             return null;
         }
     }
