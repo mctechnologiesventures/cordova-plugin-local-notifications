@@ -106,15 +106,6 @@
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="application">
-            <provider
-                android:name="de.appplant.cordova.plugin.notification.util.AssetProvider"
-                android:authorities="${applicationId}.localnotifications.provider"
-                android:exported="false"
-                android:grantUriPermissions="true" >
-                <meta-data
-                    android:name="android.support.FILE_PROVIDER_PATHS"
-                    android:resource="@xml/localnotification_provider_paths"/>
-            </provider>
 
             <receiver
                 android:name="de.appplant.cordova.plugin.localnotification.TriggerReceiver"
