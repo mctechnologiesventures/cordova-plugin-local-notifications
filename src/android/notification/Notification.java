@@ -50,6 +50,7 @@ import static android.app.AlarmManager.RTC;
 import static android.app.AlarmManager.RTC_WAKEUP;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.M;
+import static android.os.Build.VERSION_CODES.S;
 import static androidx.core.app.NotificationCompat.PRIORITY_HIGH;
 import static androidx.core.app.NotificationCompat.PRIORITY_MAX;
 import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
@@ -180,6 +181,11 @@ public final class Notification {
         AlarmManager mgr                 = getAlarmMgr();
 
         cancelScheduledAlarms();
+        if (SDK_INT >= S) {
+          if (!mgr.canScheduleExactAlarms()) {
+            return;
+          }
+        }
 
         do {
             Date date = request.getTriggerDate();
