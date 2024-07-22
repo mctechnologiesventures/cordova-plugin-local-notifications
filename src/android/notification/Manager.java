@@ -23,6 +23,7 @@
 
 package de.appplant.cordova.plugin.notification;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -44,6 +45,7 @@ import de.appplant.cordova.plugin.badge.BadgeImpl;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.M;
 import static android.os.Build.VERSION_CODES.O;
+import static android.os.Build.VERSION_CODES.S;
 import static androidx.core.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
 import static androidx.core.app.NotificationManagerCompat.IMPORTANCE_HIGH;
 import static androidx.core.app.NotificationManagerCompat.IMPORTANCE_LOW;
@@ -94,7 +96,7 @@ public final class Manager {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        return alarmManager.canScheduleExactAlarms() == true;
+        return alarmManager.canScheduleExactAlarms();
     }
 
     /**

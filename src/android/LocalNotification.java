@@ -26,15 +26,18 @@ package de.appplant.cordova.plugin.localnotification;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.KeyguardManager;
 import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
@@ -112,10 +115,12 @@ public class LocalNotification extends CordovaPlugin {
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         LocalNotification.webView = new WeakReference<CordovaWebView>(webView);
 
+      if (SDK_INT >= Build.VERSION_CODES.S) {
         this.cordova.getActivity().getApplicationContext().registerReceiver(
             alarmPermissionReceiver,
             new IntentFilter(AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED)
         );
+      }
     }
 
     /**
@@ -135,7 +140,9 @@ public class LocalNotification extends CordovaPlugin {
     @Override
     public void onDestroy() {
         deviceready = false;
+      if (SDK_INT >= Build.VERSION_CODES.S) {
         this.cordova.getActivity().getApplicationContext().unregisterReceiver(alarmPermissionReceiver);
+      }
     }
 
     /**
@@ -201,14 +208,11 @@ public class LocalNotification extends CordovaPlugin {
                     requestIgnoreBatteryOptimizations(command);
                 } else if (action.equals("dummyNotifications")) {
                     dummyNotifications(command);
-                } else
-                if (action.equals("canScheduleExactAlarms")) {
+                } else if (action.equals("canScheduleExactAlarms")) {
                     canScheduleExactAlarms(command);
-                } else
-                if (action.equals("openNotificationSettings")) {
+                } else if (action.equals("openNotificationSettings")) {
                     openNotificationSettings(command);
-                } else
-                if (action.equals("openAlarmSettings")) {
+                } else if (action.equals("openAlarmSettings")) {
                     openAlarmSettings(command);
                 }
             }
@@ -434,7 +438,7 @@ public class LocalNotification extends CordovaPlugin {
     private void canScheduleExactAlarms (CallbackContext command) {
         success(command, getNotMgr().canScheduleExactAlarms());
     }
-    
+
     /**
      * Request permission for local notifications.
      *
