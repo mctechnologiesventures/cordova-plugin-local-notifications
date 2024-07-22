@@ -85,6 +85,19 @@ public final class Manager {
     }
 
     /**
+     * Check if the setting to schedule exact alarms is enabled.
+     */
+    public boolean canScheduleExactAlarms () {
+        if (SDK_INT < S){
+            return true;
+        }
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        return alarmManager.canScheduleExactAlarms() == true;
+    }
+
+    /**
      * Schedule local notification specified by request.
      *
      * @param request  Set of notification options.
@@ -325,7 +338,7 @@ public final class Manager {
      *
      * @param type The notification life cycle type
      */
-    private List<Notification> getByType(Notification.Type type) {
+    public List<Notification> getByType(Notification.Type type) {
 
         if (type == Notification.Type.ALL)
             return getAll();

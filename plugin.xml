@@ -45,7 +45,7 @@
         <engine name="cordova" version=">=9.0.0"/>
         <engine name="cordova-android" version=">=9.0.0"/>
         <engine name="cordova-ios" version=">=6.0.0"/>
-        <engine name="cordova-windows" version=">=4.2.0"/>
+        <engine name="cordova-windows" version=">=4.2.0"  />
     </engines>
 
     <!-- dependencies -->
@@ -153,6 +153,10 @@
 
         <source-file
             src="src/android/ClickReceiver.java"
+            target-dir="src/de/appplant/cordova/plugin/localnotification" />
+
+        <source-file
+            src="src/android/AlarmPermissionReceiver.java"
             target-dir="src/de/appplant/cordova/plugin/localnotification" />
 
         <source-file
