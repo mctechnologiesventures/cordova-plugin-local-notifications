@@ -21,8 +21,8 @@
  * limitations under the License.
  */
 
-var exec = require("cordova/exec"),
-  channel = require("cordova/channel");
+var exec = require('cordova/exec'),
+  channel = require('cordova/channel');
 
 // Defaults
 exports._defaults = {
@@ -52,14 +52,14 @@ exports._defaults = {
   progressBar: false,
   resetDelay: 5,
   silent: false,
-  smallIcon: "res://icon",
+  smallIcon: 'res://icon',
   sound: true,
   sticky: false,
   summary: null,
-  text: "",
+  text: '',
   timeoutAfter: false,
-  title: "",
-  trigger: { type: "calendar" },
+  title: '',
+  trigger: { type: 'calendar' },
   vibrate: false,
   wakeup: true,
   channelId: null,
@@ -80,7 +80,7 @@ exports._listener = {};
  * @return [ Void ]
  */
 exports.hasPermission = function (callback, scope) {
-  this._exec("check", null, callback, scope);
+  this._exec('check', null, callback, scope);
 };
 
 /**
@@ -92,7 +92,7 @@ exports.hasPermission = function (callback, scope) {
  * @return [ Void ]
  */
 exports.openNotificationSettings = function (callback, scope) {
-  this._exec("openNotificationSettings", null, callback, scope);
+  this._exec('openNotificationSettings', null, callback, scope);
 };
 
 /**
@@ -104,11 +104,11 @@ exports.openNotificationSettings = function (callback, scope) {
  * @return [ Void ]
  */
 exports.canScheduleExactAlarms = function (callback, scope) {
-  if (device.platform === "iOS") {
-    console.warn("[Notifications] canScheduleExactAlarms not supported on iOS");
+  if (device.platform === 'iOS') {
+    console.warn('[Notifications] canScheduleExactAlarms not supported on iOS');
     callback(true);
   }
-  this._exec("canScheduleExactAlarms", null, callback, scope);
+  this._exec('canScheduleExactAlarms', null, callback, scope);
 };
 /**
  * Open native settings to enable alarms & reminders. Android only.
@@ -119,11 +119,11 @@ exports.canScheduleExactAlarms = function (callback, scope) {
  * @return [ Void ]
  */
 exports.openAlarmSettings = function (callback, scope) {
-  if (device.platform === "iOS") {
-    console.warn("[Notifications] canScheduleExactAlarms not supported on iOS");
+  if (device.platform === 'iOS') {
+    console.warn('[Notifications] canScheduleExactAlarms not supported on iOS');
     callback(true);
   }
-  this._exec("openAlarmSettings", null, callback, scope);
+  this._exec('openAlarmSettings', null, callback, scope);
 };
 
 /**
@@ -135,7 +135,7 @@ exports.openAlarmSettings = function (callback, scope) {
  * @return [ Void ]
  */
 exports.requestPermission = function (callback, scope) {
-  this._exec("request", null, callback, scope);
+  this._exec('request', null, callback, scope);
 };
 
 /**
@@ -146,7 +146,7 @@ exports.requestPermission = function (callback, scope) {
  * @param {Object} scope callback function's scope
  */
 exports.hasDoNotDisturbPermissions = function (callback, scope) {
-  this._exec("hasDoNotDisturbPermissions", null, callback, scope);
+  this._exec('hasDoNotDisturbPermissions', null, callback, scope);
 };
 
 /**
@@ -158,7 +158,7 @@ exports.hasDoNotDisturbPermissions = function (callback, scope) {
  * @param {Object} scope callback function's scope.
  */
 exports.requestDoNotDisturbPermissions = function (callback, scope) {
-  this._exec("requestDoNotDisturbPermissions", null, callback, scope);
+  this._exec('requestDoNotDisturbPermissions', null, callback, scope);
 };
 
 /**
@@ -171,7 +171,7 @@ exports.requestDoNotDisturbPermissions = function (callback, scope) {
  * @param {Object} scope callback function's scope
  */
 exports.isIgnoringBatteryOptimizations = function (callback, scope) {
-  this._exec("isIgnoringBatteryOptimizations", null, callback, scope);
+  this._exec('isIgnoringBatteryOptimizations', null, callback, scope);
 };
 
 /**
@@ -185,14 +185,12 @@ exports.isIgnoringBatteryOptimizations = function (callback, scope) {
  * @param {Object} scope callback function's scope
  */
 exports.requestIgnoreBatteryOptimizations = function (callback, scope) {
-  if (device.platform === "iOS") {
-    console.warn(
-      "[Notifications] requestIgnoreBatteryOptimizations not supported on iOS"
-    );
+  if (device.platform === 'iOS') {
+    console.warn('[Notifications] requestIgnoreBatteryOptimizations not supported on iOS');
     callback(true);
   }
 
-  this._exec("requestIgnoreBatteryOptimizations", null, callback, scope);
+  this._exec('requestIgnoreBatteryOptimizations', null, callback, scope);
 };
 
 /**
@@ -220,7 +218,7 @@ exports.schedule = function (msgs, callback, scope, args) {
       this._convertProperties(toast);
     }
 
-    this._exec("schedule", toasts, callback, scope);
+    this._exec('schedule', toasts, callback, scope);
   };
 
   if (args && args.skipPermission) {
@@ -253,7 +251,7 @@ exports.update = function (msgs, callback, scope, args) {
       this._convertProperties(toasts[i]);
     }
 
-    this._exec("update", toasts, callback, scope);
+    this._exec('update', toasts, callback, scope);
   };
 
   if (args && args.skipPermission) {
@@ -272,13 +270,11 @@ exports.update = function (msgs, callback, scope, args) {
  * @return [ Void ]
  */
 exports.setDummyNotifications = function (callback, scope) {
-  if (device.platform !== "Android") {
-    console.warn(
-      "[Notifications] setDummyNotifications only supported on Android"
-    );
+  if (device.platform !== 'Android') {
+    console.warn('[Notifications] setDummyNotifications only supported on Android');
     callback(true);
   } else {
-    this._exec("dummyNotifications", null, callback, scope);
+    this._exec('dummyNotifications', null, callback, scope);
   }
 };
 
@@ -295,7 +291,7 @@ exports.clear = function (ids, callback, scope) {
   ids = this._toArray(ids);
   ids = this._convertIds(ids);
 
-  this._exec("clear", ids, callback, scope);
+  this._exec('clear', ids, callback, scope);
 };
 
 /**
@@ -307,7 +303,7 @@ exports.clear = function (ids, callback, scope) {
  * @return [ Void ]
  */
 exports.clearAll = function (callback, scope) {
-  this._exec("clearAll", null, callback, scope);
+  this._exec('clearAll', null, callback, scope);
 };
 
 /**
@@ -323,7 +319,7 @@ exports.cancel = function (ids, callback, scope) {
   ids = this._toArray(ids);
   ids = this._convertIds(ids);
 
-  this._exec("cancel", ids, callback, scope);
+  this._exec('cancel', ids, callback, scope);
 };
 
 /**
@@ -335,7 +331,7 @@ exports.cancel = function (ids, callback, scope) {
  * @return [ Void ]
  */
 exports.cancelAll = function (callback, scope) {
-  this._exec("cancelAll", null, callback, scope);
+  this._exec('cancelAll', null, callback, scope);
 };
 
 /**
@@ -351,7 +347,7 @@ exports.isPresent = function (id, callback, scope) {
   var fn = this._createCallbackFn(callback, scope);
 
   this.getType(id, function (type) {
-    fn(type != "unknown");
+    fn(type != 'unknown');
   });
 };
 
@@ -365,7 +361,7 @@ exports.isPresent = function (id, callback, scope) {
  * @return [ Void ]
  */
 exports.isScheduled = function (id, callback, scope) {
-  this.hasType(id, "scheduled", callback, scope);
+  this.hasType(id, 'scheduled', callback, scope);
 };
 
 /**
@@ -378,7 +374,7 @@ exports.isScheduled = function (id, callback, scope) {
  * @return [ Void ]
  */
 exports.isTriggered = function (id, callback, scope) {
-  this.hasType(id, "triggered", callback, scope);
+  this.hasType(id, 'triggered', callback, scope);
 };
 
 /**
@@ -409,7 +405,7 @@ exports.hasType = function (id, type, callback, scope) {
  * @return [ Void ]
  */
 exports.getType = function (id, callback, scope) {
-  this._exec("type", id, callback, scope);
+  this._exec('type', id, callback, scope);
 };
 
 /**
@@ -421,7 +417,7 @@ exports.getType = function (id, callback, scope) {
  * @return [ Void ]
  */
 exports.getIds = function (callback, scope) {
-  this._exec("ids", 0, callback, scope);
+  this._exec('ids', 0, callback, scope);
 };
 
 /**
@@ -433,7 +429,7 @@ exports.getIds = function (callback, scope) {
  * @return [ Void ]
  */
 exports.getScheduledIds = function (callback, scope) {
-  this._exec("ids", 1, callback, scope);
+  this._exec('ids', 1, callback, scope);
 };
 
 /**
@@ -445,7 +441,7 @@ exports.getScheduledIds = function (callback, scope) {
  * @return [ Void ]
  */
 exports.getTriggeredIds = function (callback, scope) {
-  this._exec("ids", 2, callback, scope);
+  this._exec('ids', 2, callback, scope);
 };
 
 /**
@@ -461,7 +457,7 @@ exports.getTriggeredIds = function (callback, scope) {
 exports.get = function () {
   var args = Array.apply(null, arguments);
 
-  if (typeof args[0] == "function") {
+  if (typeof args[0] == 'function') {
     args.unshift([]);
   }
 
@@ -470,13 +466,13 @@ exports.get = function () {
     scope = args[2];
 
   if (!Array.isArray(ids)) {
-    this._exec("notification", Number(ids), callback, scope);
+    this._exec('notification', Number(ids), callback, scope);
     return;
   }
 
   ids = this._convertIds(ids);
 
-  this._exec("notifications", [3, ids], callback, scope);
+  this._exec('notifications', [3, ids], callback, scope);
 };
 
 /**
@@ -488,7 +484,7 @@ exports.get = function () {
  * @return [ Void ]
  */
 exports.getAll = function (callback, scope) {
-  this._exec("notifications", 0, callback, scope);
+  this._exec('notifications', 0, callback, scope);
 };
 
 /**
@@ -498,7 +494,7 @@ exports.getAll = function (callback, scope) {
  * @param [ Object ]     scope    The callback function's scope.
  */
 exports.getScheduled = function (callback, scope) {
-  this._exec("notifications", 1, callback, scope);
+  this._exec('notifications', 1, callback, scope);
 };
 
 /**
@@ -508,7 +504,7 @@ exports.getScheduled = function (callback, scope) {
  * @param [ Object ]     scope    The callback function's scope.
  */
 exports.getTriggered = function (callback, scope) {
-  this._exec("notifications", 2, callback, scope);
+  this._exec('notifications', 2, callback, scope);
 };
 
 /**
@@ -522,7 +518,7 @@ exports.getTriggered = function (callback, scope) {
  * @return [ Void ]
  */
 exports.addActions = function (id, actions, callback, scope) {
-  this._exec("actions", [0, id, actions], callback, scope);
+  this._exec('actions', [0, id, actions], callback, scope);
 };
 
 /**
@@ -535,7 +531,7 @@ exports.addActions = function (id, actions, callback, scope) {
  * @return [ Void ]
  */
 exports.removeActions = function (id, callback, scope) {
-  this._exec("actions", [1, id], callback, scope);
+  this._exec('actions', [1, id], callback, scope);
 };
 
 /**
@@ -548,7 +544,7 @@ exports.removeActions = function (id, callback, scope) {
  * @return [ Void ]
  */
 exports.hasActions = function (id, callback, scope) {
-  this._exec("actions", [2, id], callback, scope);
+  this._exec('actions', [2, id], callback, scope);
 };
 
 /**
@@ -593,7 +589,7 @@ exports.setDefaults = function (newDefaults) {
 exports.on = function (event, callback, scope) {
   var type = typeof callback;
 
-  if (type !== "function" && type !== "string") return;
+  if (type !== 'function' && type !== 'string') return;
 
   if (!this._listener[event]) {
     this._listener[event] = [];
@@ -641,7 +637,7 @@ exports.fireEvent = function (event) {
 
   if (!listener) return;
 
-  if (args[0] && typeof args[0].data === "string") {
+  if (args[0] && typeof args[0].data === 'string') {
     args[0].data = JSON.parse(args[0].data);
   }
 
@@ -649,7 +645,7 @@ exports.fireEvent = function (event) {
     var fn = listener[i][0],
       scope = listener[i][1];
 
-    if (typeof fn !== "function") {
+    if (typeof fn !== 'function') {
       fn = scope[fn];
     }
 
@@ -663,7 +659,7 @@ exports.fireEvent = function (event) {
  * @return [ Void ]
  */
 exports.fireQueuedEvents = function () {
-  exports._exec("ready");
+  exports._exec('ready');
 };
 
 /**
@@ -676,8 +672,8 @@ exports.fireQueuedEvents = function () {
 exports._mergeWithDefaults = function (options) {
   var values = this.getDefaults();
 
-  if (values.hasOwnProperty("sticky")) {
-    options.sticky = this._getValueFor(options, "sticky", "ongoing");
+  if (values.hasOwnProperty('sticky')) {
+    options.sticky = this._getValueFor(options, 'sticky', 'ongoing');
   }
 
   if (options.sticky && options.autoClear !== true) {
@@ -694,13 +690,13 @@ exports._mergeWithDefaults = function (options) {
     }
 
     if (!this._defaults.hasOwnProperty(key)) {
-      console.warn("Unknown property: " + key);
+      console.warn('Unknown property: ' + key);
     }
   }
 
   options.meta = {
-    plugin: "cordova-plugin-local-notification",
-    version: "0.10.0",
+    plugin: 'cordova-plugin-local-notification',
+    version: '0.10.0',
   };
 
   return options;
@@ -716,7 +712,7 @@ exports._mergeWithDefaults = function (options) {
 exports._convertProperties = function (options) {
   var parseToInt = function (prop, options) {
     if (isNaN(options[prop])) {
-      console.warn(prop + " is not a number: " + options[prop]);
+      console.warn(prop + ' is not a number: ' + options[prop]);
       return this._defaults[prop];
     } else {
       return Number(options[prop]);
@@ -724,7 +720,7 @@ exports._convertProperties = function (options) {
   };
 
   if (options.id) {
-    options.id = parseToInt("id", options);
+    options.id = parseToInt('id', options);
   }
 
   if (options.title) {
@@ -732,23 +728,23 @@ exports._convertProperties = function (options) {
   }
 
   if (options.badge) {
-    options.badge = parseToInt("badge", options);
+    options.badge = parseToInt('badge', options);
   }
 
   if (options.defaults) {
-    options.defaults = parseToInt("defaults", options);
+    options.defaults = parseToInt('defaults', options);
   }
 
   if (options.smallIcon && !options.smallIcon.match(/^res:/)) {
     console.warn('Property "smallIcon" must be of kind res://...');
   }
 
-  if (typeof options.timeoutAfter === "boolean") {
+  if (typeof options.timeoutAfter === 'boolean') {
     options.timeoutAfter = options.timeoutAfter ? 3600000 : null;
   }
 
   if (options.timeoutAfter) {
-    options.timeoutAfter = parseToInt("timeoutAfter", options);
+    options.timeoutAfter = parseToInt('timeoutAfter', options);
   }
 
   options.data = JSON.stringify(options.data);
@@ -771,7 +767,7 @@ exports._convertProperties = function (options) {
 exports._convertPriority = function (options) {
   var prio = options.priority || options.prio || 0;
 
-  if (typeof prio === "string") {
+  if (typeof prio === 'string') {
     prio = { min: -2, low: -1, high: 1, max: 2 }[prio] || 0;
   }
 
@@ -799,18 +795,13 @@ exports._convertPriority = function (options) {
 exports._convertActions = function (options) {
   var actions = [];
 
-  if (!options.actions || typeof options.actions === "string") return options;
+  if (!options.actions || typeof options.actions === 'string') return options;
 
   for (var i = 0, len = options.actions.length; i < len; i++) {
     var action = options.actions[i];
 
     if (!action.id) {
-      console.warn(
-        "Action with title " +
-          action.title +
-          " " +
-          "has no id and will not be added."
-      );
+      console.warn('Action with title ' + action.title + ' ' + 'has no id and will not be added.');
       continue;
     }
 
@@ -833,23 +824,23 @@ exports._convertActions = function (options) {
  */
 exports._convertTrigger = function (options) {
   var trigger = options.trigger || {},
-    date = this._getValueFor(trigger, "at", "firstAt", "date");
+    date = this._getValueFor(trigger, 'at', 'firstAt', 'date');
 
   var dateToNum = function (date) {
-    var num = typeof date == "object" ? date.getTime() : date;
+    var num = typeof date == 'object' ? date.getTime() : date;
     return Math.round(num);
   };
 
   if (!options.trigger) return;
 
   if (!trigger.type) {
-    trigger.type = trigger.center ? "location" : "calendar";
+    trigger.type = trigger.center ? 'location' : 'calendar';
   }
 
-  var isCal = trigger.type == "calendar";
+  var isCal = trigger.type == 'calendar';
 
   if (isCal && !date) {
-    date = this._getValueFor(options, "at", "firstAt", "date");
+    date = this._getValueFor(options, 'at', 'firstAt', 'date');
   }
 
   if (isCal && !trigger.every && options.every) {
@@ -876,12 +867,12 @@ exports._convertTrigger = function (options) {
     trigger.after = dateToNum(trigger.after);
   }
 
-  if (!trigger.count && device.platform == "windows") {
+  if (!trigger.count && device.platform == 'windows') {
     trigger.count = trigger.every ? 5 : 1;
   }
 
-  if (trigger.count && device.platform == "iOS") {
-    console.warn("trigger: { count: } is not supported on iOS.");
+  if (trigger.count && device.platform == 'iOS') {
+    console.warn('trigger: { count: } is not supported on iOS.');
   }
 
   if (!isCal) {
@@ -913,16 +904,16 @@ exports._convertTrigger = function (options) {
  * @return [ Map ] Interaction object with trigger spec.
  */
 exports._convertProgressBar = function (options) {
-  var isAndroid = device.platform == "Android",
+  var isAndroid = device.platform == 'Android',
     cfg = options.progressBar;
 
   if (cfg === undefined) return;
 
-  if (typeof cfg === "boolean") {
+  if (typeof cfg === 'boolean') {
     cfg = options.progressBar = { enabled: cfg };
   }
 
-  if (typeof cfg.enabled !== "boolean") {
+  if (typeof cfg.enabled !== 'boolean') {
     cfg.enabled = !!(cfg.value || cfg.maxValue || cfg.indeterminate !== null);
   }
 
@@ -936,7 +927,7 @@ exports._convertProgressBar = function (options) {
   cfg.enabled = !!cfg.enabled;
 
   if (cfg.enabled && options.clock === true) {
-    options.clock = "chronometer";
+    options.clock = 'chronometer';
   }
 
   return options;
@@ -951,7 +942,7 @@ exports._convertProgressBar = function (options) {
  * @return [ Function ]
  */
 exports._createCallbackFn = function (fn, scope) {
-  if (typeof fn != "function") return;
+  if (typeof fn != 'function') return;
 
   return function () {
     fn.apply(scope || this, arguments);
@@ -1026,7 +1017,7 @@ exports._exec = function (action, args, callback, scope) {
     params.push(args);
   }
 
-  exec(fn, null, "LocalNotification", action, params);
+  exec(fn, null, 'LocalNotification', action, params);
 };
 
 /**
@@ -1035,7 +1026,7 @@ exports._exec = function (action, args, callback, scope) {
  * @return [ Void ]
  */
 exports._setLaunchDetails = function () {
-  exports._exec("launch", null, function (details) {
+  exports._exec('launch', null, function (details) {
     if (details) {
       exports.launchDetails = details;
     }
@@ -1043,11 +1034,11 @@ exports._setLaunchDetails = function () {
 };
 
 // Polyfill for Object.assign
-if (typeof Object.assign != "function") {
+if (typeof Object.assign != 'function') {
   Object.assign = function (target) {
-    "use strict";
+    'use strict';
     if (target == null) {
-      throw new TypeError("Cannot convert undefined or null to object");
+      throw new TypeError('Cannot convert undefined or null to object');
     }
 
     target = Object(target);
@@ -1072,7 +1063,7 @@ if (!Array.from) {
   Array.from = (function () {
     var toStr = Object.prototype.toString;
     var isCallable = function (fn) {
-      return typeof fn === "function" || toStr.call(fn) === "[object Function]";
+      return typeof fn === 'function' || toStr.call(fn) === '[object Function]';
     };
     var toInteger = function (value) {
       var number = Number(value);
@@ -1100,21 +1091,17 @@ if (!Array.from) {
 
       // 3. ReturnIfAbrupt(items).
       if (arrayLike == null) {
-        throw new TypeError(
-          "Array.from requires an array-like object - not null or undefined"
-        );
+        throw new TypeError('Array.from requires an array-like object - not null or undefined');
       }
 
       // 4. If mapfn is undefined, then let mapping be false.
       var mapFn = arguments.length > 1 ? arguments[1] : void undefined;
       var T;
-      if (typeof mapFn !== "undefined") {
+      if (typeof mapFn !== 'undefined') {
         // 5. else
         // 5. a If IsCallable(mapfn) is false, throw a TypeError exception.
         if (!isCallable(mapFn)) {
-          throw new TypeError(
-            "Array.from: when provided, the second argument must be a function"
-          );
+          throw new TypeError('Array.from: when provided, the second argument must be a function');
         }
 
         // 5. b. If thisArg was supplied, let T be thisArg; else let T be undefined.
@@ -1139,10 +1126,7 @@ if (!Array.from) {
       while (k < len) {
         kValue = items[k];
         if (mapFn) {
-          A[k] =
-            typeof T === "undefined"
-              ? mapFn(kValue, k)
-              : mapFn.call(T, kValue, k);
+          A[k] = typeof T === 'undefined' ? mapFn(kValue, k) : mapFn.call(T, kValue, k);
         } else {
           A[k] = kValue;
         }
