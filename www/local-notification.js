@@ -279,6 +279,32 @@ exports.setDummyNotifications = function (callback, scope) {
 };
 
 /**
+ * Set a notification to be shown when the app is terminated (swiped away).
+ *
+ * @param [ String ]   title    The notification title.
+ * @param [ String ]   body     The notification body.
+ * @param [ Function ] callback The function to be exec as the callback.
+ * @param [ Object ]   scope    The callback function's scope.
+ *
+ * @return [ Void ]
+ */
+exports.setTerminateNotification = function (title, body, callback, scope) {
+  this._exec('setTerminateNotification', [title, body], callback, scope);
+};
+
+/**
+ * Clear the terminate notification.
+ *
+ * @param [ Function ] callback The function to be exec as the callback.
+ * @param [ Object ]   scope    The callback function's scope.
+ *
+ * @return [ Void ]
+ */
+exports.clearTerminateNotification = function (callback, scope) {
+  this._exec('clearTerminateNotification', null, callback, scope);
+};
+
+/**
  * Clear the specified notifications by id.
  *
  * @param [ Array<Int> ] ids      The IDs of the notifications.

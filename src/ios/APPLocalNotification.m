@@ -467,6 +467,73 @@ UNNotificationPresentationOptions const OptionAlert = UNNotificationPresentation
     }
 }
 
+/**
+ * Store terminate notification title/body in NSUserDefaults.
+ * When the app is terminated, the willTerminate observer will schedule
+ * a local notification using these values.
+ *
+ * @return [ Void ]
+ */
+- (void) setTerminateNotification:(CDVInvokedUrlCommand*)command
+{
+    NSString *title = [command argumentAtIndex:0];
+    NSString *body  = [command argumentAtIndex:1];
+
+    [[NSUserDefaults standardUserDefaults] setObject:title forKey:@"terminateNotificationTitle"];
+    [[NSUserDefaults standardUserDefaults] setObject:body  forKey:@"terminateNotificationBody"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK]
+                                callbackId:command.callbackId];
+}
+
+/**
+ * Clear terminate notification data from NSUserDefaults and cancel any
+ * pending/delivered terminate notification.
+ *
+ * @return [ Void ]
+ */
+- (void) clearTerminateNotification:(CDVInvokedUrlCommand*)command
+{
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"terminateNotificationTitle"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"terminateNotificationBody"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    [_center removePendingNotificationRequestsWithIdentifiers:@[@"terminate_notification"]];
+    [_center removeDeliveredNotificationsWithIdentifiers:@[@"terminate_notification"]];
+
+    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK]
+                                callbackId:command.callbackId];
+}
+
+/**
+ * Schedule the terminate notification with a delay.
+ * Called from the UIApplicationWillTerminate observer.
+ *
+ * @param [ NSTimeInterval ] delay Seconds before notification fires.
+ *
+ * @return [ Void ]
+ */
+- (void) scheduleTerminateNotificationWithDelay:(NSTimeInterval)delay
+{
+    NSString *title = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminateNotificationTitle"];
+    NSString *body  = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminateNotificationBody"];
+    if (!title || !body) return;
+
+    UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+    content.title = title;
+    content.body  = body;
+    content.sound = [UNNotificationSound defaultSound];
+
+    UNTimeIntervalNotificationTrigger *trigger =
+        [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:delay repeats:NO];
+
+    UNNotificationRequest *request =
+        [UNNotificationRequest requestWithIdentifier:@"terminate_notification" content:content trigger:trigger];
+
+    [_center addNotificationRequest:request withCompletionHandler:nil];
+}
+
 #pragma mark -
 #pragma mark Private
 
@@ -629,6 +696,15 @@ UNNotificationPresentationOptions const OptionAlert = UNNotificationPresentation
     [center addObserverForName:UIApplicationDidEnterBackgroundNotification
                         object:NULL queue:[NSOperationQueue mainQueue]
                     usingBlock:^(NSNotification *e) { isActive = NO; }];
+
+    [center addObserverForName:UIApplicationWillTerminateNotification
+                        object:NULL queue:[NSOperationQueue mainQueue]
+                    usingBlock:^(NSNotification *e) {
+        NSString *title = [[NSUserDefaults standardUserDefaults] stringForKey:@"terminateNotificationTitle"];
+        if (title) {
+            [self scheduleTerminateNotificationWithDelay:1];
+        }
+    }];
 }
 
 #pragma mark -

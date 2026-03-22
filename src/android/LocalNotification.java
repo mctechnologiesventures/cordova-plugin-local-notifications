@@ -214,6 +214,10 @@ public class LocalNotification extends CordovaPlugin {
                     openNotificationSettings(command);
                 } else if (action.equals("openAlarmSettings")) {
                     openAlarmSettings(command);
+                } else if (action.equals("setTerminateNotification")) {
+                    setTerminateNotification(args, command);
+                } else if (action.equals("clearTerminateNotification")) {
+                    clearTerminateNotification(command);
                 }
             }
         });
@@ -728,6 +732,45 @@ public class LocalNotification extends CordovaPlugin {
         Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:" + packageName));
 
         cordova.getActivity().startActivity(intent);
+
+        command.success();
+    }
+
+    /**
+     * Start the TerminateNotificationService with the given title and body.
+     *
+     * @param args    The exec() arguments (title, body).
+     * @param command The callback context used when calling back into JavaScript.
+     */
+    private void setTerminateNotification(JSONArray args, CallbackContext command) {
+        String title = args.optString(0);
+        String body = args.optString(1);
+        Context context = cordova.getActivity().getApplicationContext();
+
+        Intent intent = new Intent(context, TerminateNotificationService.class);
+        intent.putExtra("title", title);
+        intent.putExtra("body", body);
+        context.startService(intent);
+
+        command.success();
+    }
+
+    /**
+     * Stop the TerminateNotificationService and cancel any shown terminate notification.
+     *
+     * @param command The callback context used when calling back into JavaScript.
+     */
+    private void clearTerminateNotification(CallbackContext command) {
+        Context context = cordova.getActivity().getApplicationContext();
+
+        Intent intent = new Intent(context, TerminateNotificationService.class);
+        context.stopService(intent);
+
+        NotificationManager notificationManager =
+            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            notificationManager.cancel(999999);
+        }
 
         command.success();
     }

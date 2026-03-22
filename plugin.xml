@@ -129,6 +129,11 @@
                     <action android:name="android.intent.action.BOOT_COMPLETED" />
                 </intent-filter>
             </receiver>
+
+            <service
+                android:name="de.appplant.cordova.plugin.localnotification.TerminateNotificationService"
+                android:exported="false"
+                android:stopWithTask="false" />
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/*">
@@ -165,6 +170,10 @@
 
         <source-file
             src="src/android/RestoreReceiver.java"
+            target-dir="src/de/appplant/cordova/plugin/localnotification" />
+
+        <source-file
+            src="src/android/TerminateNotificationService.java"
             target-dir="src/de/appplant/cordova/plugin/localnotification" />
 
         <source-file
